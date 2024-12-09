@@ -95,6 +95,7 @@ body {
     }
   
     .chat-section {
+      margin-top: 60px;
       height: 50%;
     }
   }

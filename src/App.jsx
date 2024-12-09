@@ -8,6 +8,8 @@ import MatchDetails from './components/MatchDetails'
 import PlayerActivity from './components/PlayerActivity'
 import Notifications from './pages/Notifications'
 import News from './pages/News'
+import NotFound from './components/NotFound'
+import Premium from './components/Premium'
 function App() {
 
   return (
@@ -22,6 +24,8 @@ function App() {
       <Route path='/watch' element={<PlayerActivity/>}/>
       <Route path='/notifications' element={<Notifications/>}/>
       <Route path='/news' element={<News/>}/>
+      <Route path='*' element={<NotFound/>}/>
+      <Route path='/plans' element={<Premium/>}/>
       </Routes>
 
     </>

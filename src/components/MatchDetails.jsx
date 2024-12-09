@@ -5,6 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion"; // Import Framer Motion
+import { FaPlay } from "react-icons/fa";
 
 const MatchDetails = () => {
   const matchInfo = {
@@ -95,7 +96,7 @@ const MatchDetails = () => {
       <motion.div className="section live-info" variants={fadeIn}>
         <h2>Watch Live Now</h2>
         <Link to={'/watch'}>
-          <button className="live-button">Click Here</button>
+          <button className="live-button"><FaPlay className="me-3"/>Click Here</button>
         </Link>
         <p>{matchInfo.teams}</p>
       </motion.div>

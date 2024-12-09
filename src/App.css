@@ -474,8 +474,8 @@ body {
 
 .drop{
   position: absolute;
-  top: 2.5rem;
-  right: 2rem;
+  top: 3.5rem;
+  right: 1rem;
   width: 120px;
 
   border-radius: 15px;
@@ -495,4 +495,43 @@ body {
 }
 .drop li:hover{
   background-color: rgba(128, 128, 128, 0.282);
+}
+
+/* Not found */
+.notfound {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #050007;
+}
+
+.error-image {
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+/* PREMIUM */
+
+
+.premium{
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  padding: 50px;
+}
+.premium_head{
+  margin-left: 240px;
+  padding-top: 100px;
+   font-weight: bold;
+}
+
+.cards__inner{
+  margin-top: -200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }

@@ -3,6 +3,7 @@ import "../styles/player.css";
 import Header from "./Header";
 import Footer from "./Footer";
 import { Button } from "react-bootstrap";
+import { FaFlag } from "react-icons/fa";
 
 const PlayerActivity = () => {
   return (
@@ -13,7 +14,7 @@ const PlayerActivity = () => {
           {/* Left Section: Video Player */}
           <div className="video-player">
           <iframe width="560" height="315" src="https://www.youtube.com/embed/hJL1JVzf3GM?si=uW_rcxlweVT2eQMG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          <div className="d-flex text-center"><p>Live not working ?</p> <Button variant="outline-danger" className="ms-3">Report</Button></div>
+          <div className="d-flex text-center"><p>Live not working ?</p> <Button variant="outline-danger" className="ms-3" style={{height:'45px'}}><FaFlag className="me-3"/>Report</Button></div>
           </div>
     
           {/* Right Section: Chat Section */}
