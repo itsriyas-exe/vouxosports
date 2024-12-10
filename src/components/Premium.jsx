@@ -4,57 +4,56 @@ import styled from 'styled-components';
 const Premium = () => {
   return (
     <>
-    <h4 className='premium_head'>Subscribe now and start streaming</h4>
-        <StyledWrapper className='premium' style={{height:'100vh'}}>
-          <div className="cards__inner me-5" style={{width:'500px'}}>
-            <div className="cards__card card">
-              <p className="card__heading">Free Plan</p>
-              <p className="card__price">$0/month</p>
-              <ul className="card_bullets flow" role="list">
-                <li>Watch Live sports</li>
-                <li>Daily Sports news</li>
-                <li>Live chat </li>
-              </ul>
-              <a className="card__cta cta" href="#basic">Get Started</a>
-            </div>
-            <div className="overlay cards__inner" />
+      <h4 className='premium_head'>Subscribe now and start streaming</h4>
+      <StyledWrapper className='premium' style={{ height: '100vh' }}>
+        <div className="cards__inner">
+          <div className="cards__card card">
+            <p className="card__heading">Free Plan</p>
+            <p className="card__price">$0/month</p>
+            <ul className="card_bullets flow" role="list">
+              <li>Watch Live sports</li>
+              <li>Daily Sports news</li>
+              <li>Live chat </li>
+            </ul>
+            <a className="card__cta cta" href="#basic">Get Started</a>
           </div>
-          {/* Card 2 */}
-          <div className="cards__inner ms-3" style={{width:'500px'}}>
-            <div className="cards__card card">
-              <p className="card__heading">Premium</p>
-              <p className="card__price">$49/month</p>
-              <ul className="card_bullets flow" role="list">
-                <li>Access to all features</li>
-                <li>High quality streaming</li>
-                <li>No ads</li>
-              </ul>
-              <a className="card__cta cta" href="#basic">Get Started</a>
-            </div>
-            <div className="overlay cards__inner" />
+        </div>
+        {/* Card 2 */}
+        <div className="cards__inner">
+          <div className="cards__card card">
+            <p className="card__heading">Premium</p>
+            <p className="card__price">$49/month</p>
+            <ul className="card_bullets flow" role="list">
+              <li>Access to all features</li>
+              <li>High quality streaming</li>
+              <li>No ads</li>
+            </ul>
+            <a className="card__cta cta" href="#basic">Get Started</a>
           </div>
-        </StyledWrapper>
+        </div>
+      </StyledWrapper>
     </>
   );
-}
+};
 
 const StyledWrapper = styled.div`
-  .main__heading {
-    font-weight: 600;
-    font-size: 2.25em;
-    margin-bottom: 0.75em;
-    text-align: center;
-    color: #eceff1;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
 
-  .cards {
-    position: relative;
+  .cards__inner {
+    flex: 1 1 300px;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
   }
 
   .card {
     --flow-space: 0.5em;
-    --hsl: var(--hue), var(--saturation), var(--lightness);
-    flex: 1 1 14rem;
+    flex: 1;
     padding: 1.5em 2em;
     display: grid;
     grid-template-rows: auto auto auto 1fr;
@@ -64,12 +63,7 @@ const StyledWrapper = styled.div`
     background-color: #2b2b2b;
     border: 1px solid #eceff133;
     border-radius: 15px;
-  }
-
-  .card:nth-child(1) {
-    --hue: 165;
-    --saturation: 82.26%;
-    --lightness: 51.37%;
+    width: 100%;
   }
 
   .card__bullets {
@@ -77,7 +71,7 @@ const StyledWrapper = styled.div`
   }
 
   .card__heading {
-    font-size: 1.05em;
+    font-size: 1.25em;
     font-weight: 600;
   }
 
@@ -119,6 +113,55 @@ const StyledWrapper = styled.div`
   .card:hover > .cta {
     outline: none;
     background-color: #0d0d0d;
-  }`;
+  }
+
+  @media (max-width: 768px) {
+  .premium_head{
+  margin-left: 10px;
+}
+    .cards__inner {
+      max-width: 100%;
+    }
+
+    .card {
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .card__price {
+      font-size: 1.5em;
+    }
+
+    .card__heading {
+      font-size: 1em;
+    }
+  }
+
+  @media (max-width: 480px) {
+  .premium_head{
+  margin-left: 10px;
+}
+    .cards__inner {
+      flex: 1 1 100%;
+    }
+
+    .card {
+      padding: 0.8rem;
+    }
+
+    .card__price {
+      font-size: 1.25em;
+    }
+
+    .card__heading {
+      font-size: 0.9em;
+    }
+
+    .cta {
+      padding: 0.5em;
+      font-size: 0.8rem;
+    }
+  }
+`;
 
 export default Premium;

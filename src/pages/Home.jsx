@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Premium from "../components/Premium";
 
 function Home() {
-  const [showPlan,setOpenPlan] = useState(false);
   return (
    <>
       <div className="homepage">
@@ -15,7 +13,7 @@ function Home() {
             <nav className="nav-links">
               <a href="#new">News</a>
               <a href="#popular">Sports</a>
-              <a href="#sports" onClick={setOpenPlan}>Pricing</a>
+              <a href="#pricing">Pricing</a>
               <a href="#guide">About Us</a>
             </nav>
             <div className="auth-buttons">
@@ -48,7 +46,6 @@ function Home() {
           <p className="text-secondary">© VouxoSports 2024 All rights reserved. </p>
         </footer>
       </div>
-      {showPlan && <Premium />}
    </>
   );
 }

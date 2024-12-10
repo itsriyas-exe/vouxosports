@@ -10,6 +10,7 @@ import Notifications from './pages/Notifications'
 import News from './pages/News'
 import NotFound from './components/NotFound'
 import Premium from './components/Premium'
+import Admin from './pages/Admin'
 function App() {
 
   return (
@@ -26,6 +27,7 @@ function App() {
       <Route path='/news' element={<News/>}/>
       <Route path='*' element={<NotFound/>}/>
       <Route path='/plans' element={<Premium/>}/>
+      <Route path='/admin' element={<Admin/>}/>
       </Routes>
 
     </>

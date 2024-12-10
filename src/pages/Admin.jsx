@@ -1,128 +1,132 @@
-import React from 'react'
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { FaUsers, FaTv, FaCalendarAlt, FaCrown, FaDoorOpen } from 'react-icons/fa';
 
-function Admin() {
+const Admin = () => {
   return (
-    <>
-    <DashboardLayout>
-      <DashboardNavbar />
-      <MDBox py={3}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="dark"
-                icon="weekend"
-                title="Bookings"
-                count={281}
-                percentage={{
-                  color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
-                percentage={{
-                  color: "success",
-                  amount: "+3%",
-                  label: "than last month",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
-                percentage={{
-                  color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
-                }}
-              />
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
-              <ComplexStatisticsCard
-                color="primary"
-                icon="person_add"
-                title="Followers"
-                count="+91"
-                percentage={{
-                  color: "success",
-                  amount: "",
-                  label: "Just updated",
-                }}
-              />
-            </MDBox>
-          </Grid>
-        </Grid>
-        <MDBox mt={4.5}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsBarChart
-                  color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
-                  chart={sales}
-                />
-              </MDBox>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
-                />
-              </MDBox>
-            </Grid>
-          </Grid>
-        </MDBox>
-        <MDBox>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={8}>
-              <Projects />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
-            </Grid>
-          </Grid>
-        </MDBox>
-      </MDBox>
-      <Footer />
-    </DashboardLayout>
-    </>
-  )
-}
+    <StyledWrapper style={{height:'100vh'}}>
+      <div className="dashboard-container">
+        <aside className="sidebar">
+        <div className="logo">Admin Panel</div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/user-management">
+                  <FaUsers /> User Management
+                </Link>
+              </li>
+              <li>
+                <Link to="/live-management">
+                  <FaTv /> Live Management
+                </Link>
+              </li>
+              <li>
+                <Link to="/schedule-matches">
+                  <FaCalendarAlt /> Schedule Matches
+                </Link>
+              </li>
+              <li>
+                <Link to="/manage-subscription">
+                  <FaCrown /> Manage Subscriptions
+                </Link>
+              </li>
+              <li>
+                <Link to="/">
+                  <FaDoorOpen /> Log out
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+        <main className="content">
+          <h2>Welcome to the Admin Dashboard</h2>
+          <p>Select an option from the menu to get started.</p>
+        </main>
+      </div>
+    </StyledWrapper>
+  );
+};
 
-export default Admin
+const StyledWrapper = styled.div`
+  .dashboard-header {
+    background: #2b2b2b;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .dashboard-container {
+    display: flex;
+    height: 100vh;
+  }
+
+  .sidebar {
+    background: #1e1e1e;
+    color: #fff;
+    width: 250px;
+    padding: 1rem;
+  }
+
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .sidebar li {
+    margin: 1rem 0;
+  }
+
+  .sidebar a {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+
+  .sidebar a:hover {
+    background: #444;
+  }
+
+  .content {
+    flex: 1;
+    padding: 2rem;
+    background: #f5f5f5;
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-container {
+      flex-direction: column;
+    }
+
+    .sidebar {
+      width: 100%;
+    }
+
+    .content {
+      padding: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .dashboard-header {
+      font-size: 1.2rem;
+    }
+
+    .sidebar li {
+      margin: 0.5rem 0;
+    }
+
+    .sidebar a {
+      font-size: 0.9rem;
+    }
+  }
+`;
+
+export default Admin;
