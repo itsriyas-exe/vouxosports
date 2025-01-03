@@ -5,10 +5,13 @@ import Livematches from "../components/LiveMatches";
 import Upcomingmatches from "../components/UpcomingMatches";
 import Footer from "../components/Footer";
 import PointTable from "../components/PointTable";
-import { FaRegUserCircle } from "react-icons/fa";
+import { FaBell, FaRegUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import DropdownProfile from "../components/DropdownProfile";
 function Dashboard() {
   const [activeTab, setActiveTab] = useState("liveMatches");
+  //
+  const [openProfile, setOpenProfile] = useState(false);
 
   // Handle tab changes
   const handleTabChange = (tab) => {
@@ -66,7 +69,8 @@ function Dashboard() {
         <div className="search-bar">
           <input type="text" placeholder="Search for matches, leagues, teams..." />
           <button>Search</button>
-          <FaRegUserCircle size={25} className="mt-1 ms-3"/>
+          <FaRegUserCircle size={25} className="mt-1 ms-2" style={{ cursor: 'pointer' }} onClick={() => setOpenProfile((prev) => !prev)}/>
+          {openProfile && <DropdownProfile />}
         </div>
       </header>
       {/* Content Section */}

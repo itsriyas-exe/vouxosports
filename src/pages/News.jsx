@@ -1,10 +1,10 @@
 import React from "react";
-import "../styles/news.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Button } from "react-bootstrap";
+import Newsapp from "../components/NewsApp";
 
-const sportsNewsData = [
+/* const sportsNewsData = [
   {
     id: 1,
     title: "Lionel Messi Wins Ballon d'Or 2024",
@@ -29,13 +29,13 @@ const sportsNewsData = [
     image: "https://i.ytimg.com/vi/EnCMoDMU-3w/maxresdefault.jpg",
     date: "June 15, 2024",
   },
-];
+]; */
 
 const News = () => {
   return (
     <> 
     <Header/>
-        <div className="sports-news-container container-fluid">
+        {/* <div className="sports-news-container container-fluid">
           <h4 className="text-center text-white mb-5">Latest News</h4>
           <div className="row justify-content-center">
             {sportsNewsData.map((news) => (
@@ -52,7 +52,8 @@ const News = () => {
             ))}
             <Button variant="warning" style={{width:'200px'}}>Next</Button>
           </div>
-        </div>
+        </div> */}
+        <Newsapp/>
         <Footer/>
     </>
   );

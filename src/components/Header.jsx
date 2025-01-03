@@ -8,7 +8,7 @@ function Header() {
 
   return (
     <>
-      <header className="dashboard-header">
+      <header className="dashboard-header d-flex">
         <Link to={'/home'} className="logolink">
           <div className="logo">VouxoSports</div>
         </Link>

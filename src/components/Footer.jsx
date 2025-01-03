@@ -13,7 +13,7 @@ const Footer = () => {
             <Link to={'/news'} className="logolink"><a href="/news" className="footer-link">News</a></Link>
           </li>
           <li>
-            <a href="/popular" className="footer-link">Subscription</a>
+            <Link to={'/plans'} className="logolink"><a href="/popular" className="footer-link">Subscription</a></Link>
           </li>
           <li>
             <a href="/aboutus" className="footer-link">About Us</a>

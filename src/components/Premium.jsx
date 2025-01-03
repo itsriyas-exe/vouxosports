@@ -8,8 +8,8 @@ const Premium = () => {
       <StyledWrapper className='premium' style={{ height: '100vh' }}>
         <div className="cards__inner">
           <div className="cards__card card">
-            <p className="card__heading">Free Plan</p>
-            <p className="card__price">$0/month</p>
+            <p className="card__heading">Basic</p>
+            <p className="card__price">$10/month</p>
             <ul className="card_bullets flow" role="list">
               <li>Watch Live sports</li>
               <li>Daily Sports news</li>

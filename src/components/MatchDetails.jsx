@@ -102,11 +102,11 @@ const MatchDetails = () => {
       </motion.div>
 
       {/* Match Preview */}
-      <motion.div className="section" variants={slideIn}>
+      {/* <motion.div className="section" variants={slideIn}>
         <h2>Match Preview</h2>
         <p><strong>Mallorca XI:</strong> {matchInfo.lineup.mallorca}</p>
         <p><strong>Barcelona XI:</strong> {matchInfo.lineup.barcelona}</p>
-      </motion.div>
+      </motion.div> */}
 
       <Footer />
     </motion.div>

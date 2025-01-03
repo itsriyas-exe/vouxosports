@@ -1,16 +1,151 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/auth.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { motion } from 'framer-motion'; // Import Framer Motion
+import { loginAPI, registerAPI } from '../services/allAPI';
 
 function Auth({ register }) {
+  
+  const [userDetails,setUserDetails]=useState({
+    username:"",
+    email:"",
+    password:""
+  })
+
+  //navigate
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Handle login logic here
-    console.log('Logging in...');
-  };
+  // registerAPI calling
+  const handleRegister=async()=>{
+    console.log(userDetails);
+
+    // Destructuring the keys of userDetails
+    const {username,email,password}=userDetails
+    if(!username || !email || !password){
+      toast.warn('Please fill the form', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+    }
+    else{
+      try{
+        // API Fetching
+        const response= await registerAPI(userDetails)
+        console.log(response)
+        if(response.status==200){
+          toast.success(response.data, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+            setTimeout(()=>{
+              navigate('/home')
+            }, 4000)
+        }
+        else{
+          toast.error(response.response.data.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+        }
+      }
+      catch(err){
+        console.log("Error Occured"+err);
+        
+      }
+    }
+    
+  }
+
+  // LoginAPI calling
+const handleLogin= async()=>{
+  // Destructuring email and password
+  const {email,password}=userDetails
+    if( !email || !password){
+      toast.warn('Please fill the form', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
+    }
+    else{
+      try{
+        const response= await loginAPI(userDetails)
+        console.log(response);
+        if(response.status==200){
+          toast.success("Login Successful", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+            setTimeout(()=>{
+              navigate('/home')
+            }, 4000)
+            sessionStorage.setItem("username",response.data.currentUser.username)
+            sessionStorage.setItem('token',response.data.token)
+        }
+        else{
+          toast.error(response.response.data, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+        }
+        
+      }
+      catch{
+        toast.error("Server Error", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
+      }
+    }
+  
+  
+}
+
+
 
   // Animation Variants
   const fadeIn = {
@@ -52,18 +187,18 @@ function Auth({ register }) {
 
           {/* Conditional Input for Username */}
           {register && (
-            <input
+            <input onChange={(e)=>setUserDetails({...userDetails,username:e.target.value})}
               type="text"
               placeholder="Username"
               className="form-control mb-3 mx-auto w-75"
             />
           )}
-          <input
+          <input onChange={(e)=>setUserDetails({...userDetails,email:e.target.value})}
             type="email"
             placeholder="Email ID"
             className="form-control mb-3 mx-auto w-75"
           />
-          <input
+          <input onChange={(e)=>setUserDetails({...userDetails,password:e.target.value})}
             type="password"
             placeholder="Password"
             className="form-control mb-3 mx-auto w-75"
@@ -72,11 +207,9 @@ function Auth({ register }) {
           {/* Conditional Buttons and Links */}
           {register ? (
             <div>
-              <Link to={'/home'}>
-                <Button className="mb-2" variant="outline-warning">
+                <Button onClick={handleRegister} className="mb-2" variant="outline-warning">
                   Sign Up
                 </Button>
-              </Link>
               <p>
                 Already Registered?{' '}
                 <Link to="/login" className="text-decoration-none">
@@ -102,6 +235,18 @@ function Auth({ register }) {
               </p>
             </div>
           )}
+          <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
         </motion.div>
       </div>
     </motion.div>

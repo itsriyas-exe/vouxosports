@@ -40,6 +40,7 @@ body {
   color: yellow;
 }
 .logolink{
+  color: rgb(60, 60, 60);
   text-decoration: none;
 }
 
@@ -493,10 +494,19 @@ body {
   border-left: 1px solid grey;
   border-top: 1px solid gray;
 }
+.drop ul{
+  list-style-type: none;
+}
 .drop li:hover{
   background-color: rgba(128, 128, 128, 0.282);
 }
-
+.drop li{
+  margin-top: 5px;
+}
+@media (max-width: 768px) {
+.search-bar{
+}
+}
 /* Not found */
 .notfound {
   min-height: 100vh;
