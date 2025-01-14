@@ -9,7 +9,7 @@ const Upcomingmatches = () => {
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/upcomingmatches");
+        const response = await axios.get("https://vouxosports-backend.onrender.com/upcomingmatches");
         setMatches(response.data);
         setLoading(false);
       } catch (err) {
