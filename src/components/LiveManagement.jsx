@@ -14,7 +14,7 @@ const LiveManagement = () => {
 
   const fetchMatches = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/matches");
+      const response = await axios.get("https://vouxosports-backend.onrender.com/matches");
       setMatches(response.data);
     } catch (err) {
       console.error("Error fetching matches:", err);
@@ -23,7 +23,7 @@ const LiveManagement = () => {
 
   const addMatch = async (matchData) => {
     try {
-      const response = await axios.post("http://localhost:3000/matches", matchData);
+      const response = await axios.post("https://vouxosports-backend.onrender.com/matches", matchData);
       setMatches([...matches, response.data]);
     } catch (err) {
       console.error("Error adding match:", err);
@@ -32,7 +32,7 @@ const LiveManagement = () => {
 
   const updateMatch = async (id, updatedData) => {
     try {
-      const response = await axios.put(`http://localhost:3000/matches/${id}`, updatedData);
+      const response = await axios.put(`https://vouxosports-backend.onrender.com/matches/${id}`, updatedData);
       setMatches(matches.map((match) => (match.id === id ? response.data : match)));
       setEditMatch(null);
     } catch (err) {
@@ -42,7 +42,7 @@ const LiveManagement = () => {
 
   const deleteMatch = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/matches/${id}`);
+      await axios.delete(`https://vouxosports-backend.onrender.com/matches/${id}`);
       setMatches(matches.filter((match) => match.id !== id));
     } catch (err) {
       console.error("Error deleting match:", err);
