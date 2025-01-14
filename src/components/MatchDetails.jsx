@@ -16,7 +16,7 @@ const MatchDetails = () => {
   useEffect(() => {
     const fetchMatchDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/matches/${id}`);
+        const response = await fetch(`https://vouxosports-backend.onrender.com/matches/${id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch match details");
         }
