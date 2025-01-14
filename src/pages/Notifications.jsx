@@ -30,7 +30,7 @@ function Notifications() {
 
   const fetchNotifications = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/notifications");
+      const response = await axios.get("https://vouxosports-backend.onrender.com/notifications");
       setNotifications(response.data);
     } catch (error) {
       console.error("Error fetching notifications:", error);
