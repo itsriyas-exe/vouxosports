@@ -16,7 +16,7 @@ const ScheduleMatches = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editId, setEditId] = useState(null);
 
-  const API_URL = "http://localhost:3000/upcomingmatches";
+  const API_URL = "https://vouxosports-backend.onrender.com/upcomingmatches";
 
   // Fetch matches from the server
   useEffect(() => {
