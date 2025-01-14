@@ -15,7 +15,7 @@ const UserManagement = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/users");
+        const response = await axios.get("https://vouxosports-backend.onrender.com/users");
         setUsers(response.data);
         setLoading(false);
       } catch (error) {
@@ -39,7 +39,7 @@ const UserManagement = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this user?");
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:3000/users/${id}`);
+        await axios.delete(`https://vouxosports-backend.onrender.com/users/${id}`);
         // Filter the users array by excluding the deleted user
         setUsers(users.filter((user) => user._id !== id));  // use _id if that's the MongoDB default
       } catch (error) {
@@ -54,7 +54,7 @@ const UserManagement = () => {
     const userEmail = prompt("Enter new email for the user:");
     if (userName && userEmail) {
       axios
-        .put(`http://localhost:3000/users/${id}`, { name: userName, email: userEmail })
+        .put(`https://vouxosports-backend.onrender.com/users/${id}`, { name: userName, email: userEmail })
         .then((response) => {
           setUsers(
             users.map((user) =>
