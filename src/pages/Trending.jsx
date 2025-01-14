@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/LatestNews.css';
+import '../styles/latestNews.css';
 import LatestNews from '../components/LatestNews';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
