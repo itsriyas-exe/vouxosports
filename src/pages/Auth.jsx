@@ -193,7 +193,7 @@ const handleLogin = async () => {
           variants={slideIn}
         >
           <img
-            src="src/assets/dataset-card.png"
+            src="https://i.ibb.co/X8g0wJv/dataset-card.png"
             alt="Registration"
             className="auth-image"
           />
