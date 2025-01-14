@@ -13,7 +13,7 @@ const LiveMatches = () => {
     // Fetch data from the server
     const fetchMatches = async () => {
       try {
-        const response = await fetch("http://localhost:3000/matches");
+        const response = await fetch("https://vouxosports-backend.onrender.com/matches");
         if (!response.ok) {
           throw new Error("Failed to fetch matches");
         }
