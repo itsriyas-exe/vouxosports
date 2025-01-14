@@ -1,28 +1,37 @@
-import React from "react";
-import '../styles/matchdetails.css';
+import React, { useState, useEffect } from "react";
+import "../styles/matchdetails.css";
 import { MdLiveTv } from "react-icons/md";
 import Header from "./Header";
 import Footer from "./Footer";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion"; // Import Framer Motion
+import { Link, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 import { FaPlay } from "react-icons/fa";
 
 const MatchDetails = () => {
-  const matchInfo = {
-    teams: "Mallorca vs Barcelona",
-    time: {
-      IST: "11:30 PM",
-      GST: "10:00 PM",
-      SST: "09:00 PM",
-    },
-    stadium: "Son Moix Stadium",
-    league: "LaLiga",
-    round: "Round 19",
-    lineup: {
-      mallorca: "Leo Román; Maffeo, Raillo, Valjent, Mojica; Morlanes, Samu; Antonio, Darder, Valery; Muriqi",
-      barcelona: "Iñaki Peña; Koundé, Cubarsi, Iñigo Martinez, Balde; Casadó, Pedri; Lamine Yamal, Dani Olmo, Raphinha; F. Torres",
-    },
-  };
+  const { id } = useParams(); // Get the match ID from the URL
+  const [matchInfo, setMatchInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchMatchDetails = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/matches/${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch match details");
+        }
+        const data = await response.json();
+        setMatchInfo(data);
+        localStorage.setItem('matchInfo', JSON.stringify(data)); // Store in localStorage
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMatchDetails();
+  }, [id]);
 
   // Animation Variants
   const fadeIn = {
@@ -35,23 +44,27 @@ const MatchDetails = () => {
     visible: { opacity: 1, x: 0, transition: { duration: 0.8 } },
   };
 
+  if (loading) {
+    return <div className="loading">Loading match details...</div>;
+  }
+
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
+
   return (
-    <motion.div
-      className="match-detailss"
-      initial="hidden"
-      animate="visible"
-    >
+    <motion.div className="match-detailss" initial="hidden" animate="visible">
       <Header />
 
       {/* Match Header */}
       <motion.div className="header" variants={fadeIn}>
-        <h3>{matchInfo.teams}</h3>
+        <h4 style={{fontWeight:"bold"}}>{matchInfo.team1Name}<span className="ms-3 me-3">vs</span>{matchInfo.team2Name}</h4>
         <p>
           <MdLiveTv size={25} color="red" />
         </p>
         <img
-          src="https://www.fcbarcelona.com/photo-resources/2023/12/01/d571d426-6a6b-40a1-b3f9-d18266958fc8/_GP21487.jpg?width=1200&height=750"
-          alt=""
+          src={matchInfo.matchBanner}
+          alt={matchInfo.teams}
           width={"250px"}
           className="rounded"
         />
@@ -61,19 +74,7 @@ const MatchDetails = () => {
       <motion.div className="match-infoo" variants={fadeIn}>
         <div className="info-row">
           <span>Time (IST):</span>
-          <span>{matchInfo.time.IST}</span>
-        </div>
-        <div className="info-row">
-          <span>Time (GST):</span>
-          <span>{matchInfo.time.GST}</span>
-        </div>
-        <div className="info-row">
-          <span>Time (SST):</span>
-          <span>{matchInfo.time.SST}</span>
-        </div>
-        <div className="info-row">
-          <span>Stadium:</span>
-          <span>{matchInfo.stadium}</span>
+          <span>{matchInfo.time}</span>
         </div>
         <div className="info-row">
           <span>League:</span>
@@ -83,30 +84,34 @@ const MatchDetails = () => {
           <span>Round:</span>
           <span>{matchInfo.round}</span>
         </div>
+        <div className="info-row">
+          <span>Streaming:</span>
+          <span>VouxoSports</span>
+        </div>
       </motion.div>
 
       {/* Lineup Section */}
       <motion.div className="section" variants={slideIn}>
         <h2>Match Lineup</h2>
-        <p><strong>Mallorca XI:</strong> {matchInfo.lineup.mallorca}</p>
-        <p><strong>Barcelona XI:</strong> {matchInfo.lineup.barcelona}</p>
+        <p>
+          <strong>{matchInfo.team1Name} XI :</strong> {matchInfo.lineupT1}
+        </p>
+        <p>
+          <strong>{matchInfo.team2Name} XI :</strong> {matchInfo.lineupT2}
+        </p>
       </motion.div>
 
       {/* Match Live Info */}
       <motion.div className="section live-info" variants={fadeIn}>
         <h2>Watch Live Now</h2>
-        <Link to={'/watch'}>
-          <button className="live-button"><FaPlay className="me-3"/>Click Here</button>
+        <Link to={"/watch"}>
+          <button className="live-button">
+            <FaPlay className="me-3" />
+            Click Here
+          </button>
         </Link>
         <p>{matchInfo.teams}</p>
       </motion.div>
-
-      {/* Match Preview */}
-      {/* <motion.div className="section" variants={slideIn}>
-        <h2>Match Preview</h2>
-        <p><strong>Mallorca XI:</strong> {matchInfo.lineup.mallorca}</p>
-        <p><strong>Barcelona XI:</strong> {matchInfo.lineup.barcelona}</p>
-      </motion.div> */}
 
       <Footer />
     </motion.div>

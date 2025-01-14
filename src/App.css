@@ -545,3 +545,9 @@ body {
   align-items: center;
 
 }
+#text_p{
+  color: rgb(32, 32, 32);
+}
+#text_td{
+  color: black;
+}

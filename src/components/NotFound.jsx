@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { FaBackward } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const NotFound = () => {
+
+  //to hold token from session stor
+  const [token,setToken] = useState("")
+
+ 
+  useEffect(()=>{
+      setToken(sessionStorage.getItem('token'))
+  },[token])
+  console.log(token);
   return (
     <StyledWrapper className='notfound'>
       <div className="planet">
       </div>
       <p className='mt-5 text-center'>Error 404 Page not Found !</p>
-      <Link to={'/home'}><Button variant='outline-success'><FaBackward className='me-3'/>Back to Home</Button></Link>
+     { token? <Link to={'/home'}><Button variant='outline-success'><FaBackward className='me-3'/>Back to Home</Button></Link>
+     :  <Link to={'/'}><Button variant='outline-success'><FaBackward className='me-3'/>Back to Home</Button></Link>}
     </StyledWrapper>
   );
 }

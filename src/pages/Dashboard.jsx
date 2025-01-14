@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from "react";
 import "../styles/dashboard.css";
-import Favorites from "../components/Favorites";
 import Livematches from "../components/LiveMatches";
 import Upcomingmatches from "../components/UpcomingMatches";
 import Footer from "../components/Footer";
 import PointTable from "../components/PointTable";
 import { FaBell, FaRegUserCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DropdownProfile from "../components/DropdownProfile";
+import LiveScores from "../components/LiveScores";
 function Dashboard() {
   const [activeTab, setActiveTab] = useState("liveMatches");
   //
   const [openProfile, setOpenProfile] = useState(false);
 
+  //check auth
+  const [token, setToken] = useState("");
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem("token");
+    setToken(storedToken);
+    // Redirect logic based on token and userId
+    if (!storedToken) {
+        // Redirect to /home if token exists but userId does not match
+        navigate("/error");
+      }
+    }, [navigate]);
+  
   // Handle tab changes
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -63,12 +77,10 @@ function Dashboard() {
             className={activeTab === "favorites" ? "active" : ""}
             onClick={() => handleTabChange("favorites")}
           >
-            Favorites
+            Live Scores
           </button>
         </nav>
-        <div className="search-bar">
-          <input type="text" placeholder="Search for matches, leagues, teams..." />
-          <button>Search</button>
+        <div>
           <FaRegUserCircle size={25} className="mt-1 ms-2" style={{ cursor: 'pointer' }} onClick={() => setOpenProfile((prev) => !prev)}/>
           {openProfile && <DropdownProfile />}
         </div>
@@ -123,7 +135,7 @@ function Dashboard() {
 
         {activeTab === "favorites" && (
           <div className="content-section">
-            <Favorites/>
+            <LiveScores/>
             {/* Add favorite items here */}
           </div>
         )}

@@ -1,104 +1,100 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion"; // Import framer-motion
 
-const Livematches = () => {
-  const matches = [
-    {
-      id: 1,
-      team1: {
-        name: "Mallorca",
-        logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyAG9nM9A3hDbJ8bWxIlbAPG-IkK7kXjJEng&s",
-      },
-      team2: {
-        name: "Barcelona",
-        logo: "https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/1010px-FC_Barcelona_%28crest%29.svg.png",
-      },
-      time: "10:00 PM",
-      league: "La Liga",
-      round: "Round 19",
-      broadcaster: "VouxoSports",
-    },
-    {
-      id: 2,
-      team1: {
-        name: "Al Hilal",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/8/83/Al-hilal_logo.png",
-      },
-      team2: {
-        name: "Al Gharafa",
-        logo: "https://upload.wikimedia.org/wikipedia/en/7/79/Al-Gharafa_SC_logo.svg",
-      },
-      time: "10:00 PM",
-      league: "AFC Champions League",
-      round: "Round 6",
-      broadcaster: "VouxoSports",
-    },
-    {
-      id: 3,
-      team1: {
-        name: "Bayern Munich",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg/2048px-FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg.png",
-      },
-      team2: {
-        name: "Bayer Leverkusen",
-        logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYc6OvB29gnQ3KSARysjXciSzUjBvTA8llug&s",
-      },
-      time: "11:45 PM",
-      league: "DFB Pokal",
-      round: "Round of 16",
-      broadcaster: "VouxoSports",
-    },
-    {
-      id: 4,
-      team1: {
-        name: "Kerala Blasters",
-        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/Kerala_Blasters_FC_logo.svg/1200px-Kerala_Blasters_FC_logo.svg.png",
-      },
-      team2: {
-        name: "Chennaiyin FC",
-        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6c/Chennaiyin_FC_logo.svg/1200px-Chennaiyin_FC_logo.svg.png",
-      },
-      time: "11:45 PM",
-      league: "Indian Super League",
-      round: "Round of 16",
-      broadcaster: "VouxoSports",
-    },
-  ];
+const LiveMatches = () => {
+  const [matches, setMatches] = useState([]);
+  const [filteredMatches, setFilteredMatches] = useState([]); // For displaying filtered matches
+  const [searchQuery, setSearchQuery] = useState(""); // For tracking search input
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // Fetch data from the server
+    const fetchMatches = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/matches");
+        if (!response.ok) {
+          throw new Error("Failed to fetch matches");
+        }
+        const data = await response.json();
+        setMatches(data); // Assuming data is an array of matches
+        setFilteredMatches(data); // Initialize filtered matches
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMatches();
+  }, []);
+
+  // Function to handle search
+  const handleSearch = () => {
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    const filtered = matches.filter(
+      (match) =>
+        match.team1Name.toLowerCase().includes(lowerCaseQuery) ||
+        match.team2Name.toLowerCase().includes(lowerCaseQuery) ||
+        match.league.toLowerCase().includes(lowerCaseQuery) ||
+        match.round.toLowerCase().includes(lowerCaseQuery)
+    );
+    setFilteredMatches(filtered);
+  };
+
+  if (loading) {
+    return <div className="loading">Loading matches...</div>;
+  }
+
+  if (error) {
+    return <div className="error">Error: Please check your network connection! {error}</div>;
+  }
 
   return (
-    <div className="app-container">
-      {matches.map((match) => (
-        <motion.div
-          key={match.id}
-          className="match-card"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: match.id * 0.2 }}
-        >
-          <Link to={"/details"} className="linkSec">
-            <div className="team">
-              <img src={match.team1.logo} alt={match.team1.name} className="team-logo" />
-              <p className="team-name">{match.team1.name}</p>
-            </div>
-            <div className="match-info">
-              <p className="time">{match.time}</p>
-              <p className="vs">VS</p>
-              <p className="broadcaster">📺 {match.broadcaster}</p>
-            </div>
-            <div className="team">
-              <img src={match.team2.logo} alt={match.team2.name} className="team-logo" />
-              <p className="team-name">{match.team2.name}</p>
-            </div>
-            <div className="match-details">
-              <p>🏆 {match.league}</p>
-              <p>🔍 {match.round}</p>
-            </div>
-          </Link>
-        </motion.div>
-      ))}
-    </div>
+    <>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search for matches, leagues, teams..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+      <div className="app-container">
+        {filteredMatches.map((match) => (
+          <motion.div
+            key={match.id}
+            className="match-card"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: match.id * 0.2 }}
+          >
+            <Link to={`/details/${match._id}`} className="linkSec">
+              <div className="team">
+                <img src={match.team1Logo} alt={match.team1Name} className="team-logo" />
+                <p className="team-name" id="text_p">{match.team1Name}</p>
+              </div>
+              <div className="match-info">
+                <p className="time" id="text_p">{match.time}</p>
+                <p className="vs" id="text_p">VS</p>
+                <p className="broadcaster">📺 VouxoSports</p>
+              </div>
+              <div className="team">
+                <img src={match.team2Logo} alt={match.team2Name} className="team-logo" />
+                <p className="team-name" id="text_p">{match.team2Name}</p>
+              </div>
+              <div className="match-details">
+                <p id="text_p">🏆 {match.league}</p>
+                <p id="text_p">🔍 Round: {match.round}</p>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    </>
   );
 };
 
-export default Livematches;
+export default LiveMatches;

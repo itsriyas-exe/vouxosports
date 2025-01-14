@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import DropdownProfile from './DropdownProfile';
+import ('../styles/header.css')
 
 function Header() {
   const [openProfile, setOpenProfile] = useState(false);
@@ -10,7 +11,9 @@ function Header() {
     <>
       <header className="dashboard-header d-flex">
         <Link to={'/home'} className="logolink">
-          <div className="logo">VouxoSports</div>
+          <div>
+            <div className="logo">VouxoSports</div>
+            </div>
         </Link>
         <div className="search-bar">
           <FaRegUserCircle

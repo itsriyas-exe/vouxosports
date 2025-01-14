@@ -1,59 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { RiVipCrownLine } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+import { FaSearch, FaUserPlus } from "react-icons/fa";
+
 const UserManagement = () => {
-  // Sample user data
-  const [users, setUsers] = useState([
-    { id: 1, name: "John Doe", email: "john.doe@example.com" },
-    { id: 2, name: "Jane Smith", email: "jane.smith@example.com" },
-    { id: 3, name: "Alice Johnson", email: "alice.johnson@example.com" },
-  ]);
-
+  const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Filtered users based on the search term
+  // Fetch users from the backend
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/users");
+        setUsers(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching users", error);
+        setLoading(false);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  // Filter users based on search term
   const filteredUsers = users.filter(
     (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      (user.name?.toLowerCase().includes(searchTerm.toLowerCase())) || 
+      (user.email?.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+  
 
-  // Delete user function
-  const handleDelete = (id) => {
+  // Handle delete user
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this user?");
     if (confirmDelete) {
-      setUsers(users.filter((user) => user.id !== id));
+      try {
+        await axios.delete(`http://localhost:3000/users/${id}`);
+        // Filter the users array by excluding the deleted user
+        setUsers(users.filter((user) => user._id !== id));  // use _id if that's the MongoDB default
+      } catch (error) {
+        console.error("Error deleting user", error);
+      }
     }
   };
 
-  // Edit user function (for demonstration)
+  // Handle edit user (for simplicity using prompt)
   const handleEdit = (id) => {
     const userName = prompt("Enter new name for the user:");
     const userEmail = prompt("Enter new email for the user:");
     if (userName && userEmail) {
-      setUsers(
-        users.map((user) =>
-          user.id === id ? { ...user, name: userName, email: userEmail } : user
-        )
-      );
+      axios
+        .put(`http://localhost:3000/users/${id}`, { name: userName, email: userEmail })
+        .then((response) => {
+          setUsers(
+            users.map((user) =>
+              user._id === id ? { ...user, name: userName, email: userEmail } : user
+            )
+          );
+        })
+        .catch((error) => console.error("Error updating user", error));
     }
   };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <StyledWrapper>
       <div className="header">
-        <h4 className="text-secondary">User Management</h4>
-        <input
-          type="text"
-          placeholder="Search users..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        <h4>User Management</h4>
+        <div><FaSearch className="me-2"/>
+          <input
+            type="text"
+            placeholder="Search users..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
       <table>
-        <thead className="text-info">
+        <thead>
           <tr>
             <th>#</th>
             <th>Name</th>
@@ -61,24 +90,32 @@ const UserManagement = () => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody style={{color:'black'}}>
-          {filteredUsers.map((user, index) => (
-            <tr key={user.id}>
-              <td>{index + 1}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>
-                <button onClick={() => handleEdit(user.id)}><CiEdit className='me-2' />Edit</button>
-                <button onClick={() => handleDelete(user.id)}><MdDelete className="me-2" />Delete</button>
-                <button className="btn btn-warning"><RiVipCrownLine className="me-2"/> Membership</button>
-              </td>
-            </tr>
-          ))}
-          {filteredUsers.length === 0 && (
+        <tbody>
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((user, index) => (
+              <tr key={user._id}> {/* Use _id as key if that's the MongoDB ID */}
+                <td id="text_td">{index + 1}</td>
+                <td id="text_td">{user.username}</td>
+                <td id="text_td">{user.email}</td>
+                <td>
+                  <button onClick={() => handleEdit(user._id)}>
+                    <CiEdit className="me-2" />
+                    Edit
+                  </button>
+                  <button onClick={() => handleDelete(user._id)}>
+                    <MdDelete className="me-2" />
+                    Delete
+                  </button>
+                  <button className="btn btn-warning">
+                    <RiVipCrownLine className="me-2" />
+                    Membership
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
             <tr>
-              <td colSpan="4" className="no-users">
-                No users found.
-              </td>
+              <td colSpan="4">No users found</td>
             </tr>
           )}
         </tbody>
@@ -95,7 +132,6 @@ const StyledWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    background-color:transparent;
   }
 
   .header input {
@@ -112,7 +148,8 @@ const StyledWrapper = styled.div`
     margin-top: 1rem;
   }
 
-  th, td {
+  th,
+  td {
     text-align: left;
     padding: 0.75rem;
     border: 1px solid #ccc;

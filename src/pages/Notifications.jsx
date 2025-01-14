@@ -1,17 +1,43 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion"; // Import Framer Motion
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { motion } from "framer-motion";
 import "../styles/notifications.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 function Notifications() {
-  const [notifications, setNotifications] = useState([
-    "Your favorite team won!",
-    "New comment on your post.",
-    "Your profile has been updated.",
-    "Weekly newsletter is available.",
-    "Checkout upcoming matches.",
-  ]);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  //check auth
+  const [token, setToken] = useState("");
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem("token");
+    setToken(storedToken);
+    // Redirect logic based on token and userId
+    if (!storedToken) {
+        // Redirect to /home if token exists but userId does not match
+        navigate("/error");
+      }
+    }, [navigate]);
+  
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/notifications");
+      setNotifications(response.data);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const clearNotifications = () => {
     setNotifications([]);
@@ -58,7 +84,14 @@ function Notifications() {
               initial="hidden"
               animate="visible"
             >
-              {notifications.length > 0 ? (
+              {loading ? (
+                <motion.p
+                  className="text-center text-secondary mt-4"
+                  variants={fadeIn}
+                >
+                  Loading notifications...
+                </motion.p>
+              ) : notifications.length > 0 ? (
                 notifications.map((notification, index) => (
                   <motion.div
                     key={index}
@@ -67,7 +100,8 @@ function Notifications() {
                     initial="hidden"
                     animate="visible"
                   >
-                    {notification}
+                    <h6 id="titleH">{notification.title || "No Title available"}</h6>
+                    <p>{notification.message || "No message available"}</p>
                   </motion.div>
                 ))
               ) : (

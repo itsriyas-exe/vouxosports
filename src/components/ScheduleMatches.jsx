@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const ScheduleMatches = () => {
   const [matches, setMatches] = useState([]);
@@ -7,68 +8,99 @@ const ScheduleMatches = () => {
     team1Name: "",
     team1Logo: "",
     team2Name: "",
+    team2Logo: "",
     time: "",
     league: "",
     round: "",
   });
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
+  const [editId, setEditId] = useState(null);
+
+  const API_URL = "http://localhost:3000/upcomingmatches";
+
+  // Fetch matches from the server
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        const response = await axios.get(API_URL);
+        setMatches(response.data);
+      } catch (error) {
+        console.error("Error fetching matches:", error);
+      }
+    };
+    fetchMatches();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editIndex !== null) {
-      const updatedMatches = matches.map((match, index) =>
-        index === editIndex ? formData : match
-      );
-      setMatches(updatedMatches);
-      setEditIndex(null);
-      alert("Match updated!");
-    } else {
-      setMatches([...matches, formData]);
-      alert("Match scheduled!");
-    }
+    try {
+      if (editId) {
+        // Update match
+        const response = await axios.put(`${API_URL}/${editId}`, formData);
+        setMatches((prev) =>
+          prev.map((match) => (match._id === editId ? response.data : match))
+        );
+        alert("Match updated!");
+      } else {
+        // Create match
+        const response = await axios.post(API_URL, formData);
+        setMatches((prev) => [...prev, response.data]);
+        alert("Match scheduled!");
+      }
 
-    setFormData({
-      team1Name: "",
-      team1Logo: "",
-      team2Name: "",
-      time: "",
-      league: "",
-      round: "",
-    });
-    setIsFormVisible(false);
+      setFormData({
+        team1Name: "",
+        team1Logo: "",
+        team2Name: "",
+        team2Logo: "",
+        time: "",
+        league: "",
+        round: "",
+      });
+      setIsFormVisible(false);
+      setEditId(null);
+    } catch (error) {
+      console.error("Error saving match:", error);
+      alert("Failed to save match. Please try again.");
+    }
   };
 
   const toggleFormVisibility = () => {
     setIsFormVisible(!isFormVisible);
   };
 
-  const handleEdit = (index) => {
-    setFormData(matches[index]);
+  const handleEdit = (id) => {
+    const match = matches.find((m) => m._id === id);
+    setFormData(match);
     setIsFormVisible(true);
-    setEditIndex(index);
+    setEditId(id);
   };
 
-  const handleDelete = (index) => {
-    const updatedMatches = matches.filter((_, i) => i !== index);
-    setMatches(updatedMatches);
-    alert("Match deleted!");
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      setMatches((prev) => prev.filter((match) => match._id !== id));
+      alert("Match deleted!");
+    } catch (error) {
+      console.error("Error deleting match:", error);
+      alert("Failed to delete match. Please try again.");
+    }
   };
 
   return (
     <StyledWrapper>
       <div className="container">
-       <div className="header-section d-flex">
-            <h4>Schedule Matches</h4>
-            <button className="toggle-btn" onClick={toggleFormVisibility}>
-              {isFormVisible ? "Cancel" : "Schedule a Match"}
-            </button>
-       </div>
+        <div className="header-section d-flex">
+          <h4>Schedule Matches</h4>
+          <button className="toggle-btn" onClick={toggleFormVisibility}>
+            {isFormVisible ? "Cancel" : "Schedule a Match"}
+          </button>
+        </div>
 
         {isFormVisible && (
           <form onSubmit={handleSubmit}>
@@ -119,7 +151,6 @@ const ScheduleMatches = () => {
                 required
               />
             </div>
-            
 
             <div className="form-group">
               <label>Match Time</label>
@@ -157,7 +188,7 @@ const ScheduleMatches = () => {
             </div>
 
             <button type="submit" className="submit-btn">
-              {editIndex !== null ? "Update Match" : "Save Match"}
+              {editId ? "Update Match" : "Save Match"}
             </button>
           </form>
         )}
@@ -166,8 +197,8 @@ const ScheduleMatches = () => {
           <h3>Scheduled Matches</h3>
           {matches.length > 0 ? (
             <ul>
-              {matches.map((match, index) => (
-                <li key={index}>
+              {matches.map((match) => (
+                <li key={match._id}>
                   <div className="match-item">
                     <div>
                       <strong>{match.team1Name}</strong> vs {" "}
@@ -191,10 +222,16 @@ const ScheduleMatches = () => {
                       League: {match.league}, Round: {match.round}
                     </div>
                     <div className="action-buttons">
-                      <button onClick={() => handleEdit(index)} className="edit-btn">
+                      <button
+                        onClick={() => handleEdit(match._id)}
+                        className="edit-btn"
+                      >
                         Edit
                       </button>
-                      <button onClick={() => handleDelete(index)} className="delete-btn">
+                      <button
+                        onClick={() => handleDelete(match._id)}
+                        className="delete-btn"
+                      >
                         Delete
                       </button>
                     </div>

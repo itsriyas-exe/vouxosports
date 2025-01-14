@@ -15,19 +15,23 @@
   }
   
   .notification-item {
-    background: #495057; /* Notification card background */
-    color: #f8f9fa;
+    background: #ececec; /* Notification card background */
+    color: #606060;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;
   }
   
   .notification-item:hover {
     transform: scale(1.02);
-    background: #5a6268;
+    background: #bfbfbf7d;
   }
   
   .btn-danger {
     font-size: 0.9rem;
+  }
+  #titleH{
+    color: black;
+    font-weight: bold;
   }
   
   @media (max-width: 768px) {

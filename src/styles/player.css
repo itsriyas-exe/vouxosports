@@ -90,10 +90,6 @@ body {
       flex-direction: column;
     }
   
-    .video-player {
-      height: 50%;
-    }
-  
     .chat-section {
       margin-top: 60px;
       height: 50%;
