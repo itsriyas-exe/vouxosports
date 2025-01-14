@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/LatestNews.css';
+import '../styles/latestNews.css';
 
 const LatestNews = ({ news }) => {
     const { imageUrl, title, gmtTime, sourceStr, page } = news;
