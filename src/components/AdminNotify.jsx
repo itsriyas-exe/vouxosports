@@ -18,7 +18,7 @@ function AdminNotify() {
 
   const fetchNotifications = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/notifications");
+      const response = await axios.get("https://vouxosports-backend.onrender.com/notifications");
       setNotifications(response.data);
     } catch (err) {
       console.error("Error fetching notifications:", err);
@@ -37,7 +37,7 @@ function AdminNotify() {
 
   const addNotification = async () => {
     try {
-      await axios.post("http://localhost:3000/notifications", {
+      await axios.post("https://vouxosports-backend.onrender.com/notifications", {
         title: currentNotification.title,
         message: currentNotification.message,
       });
@@ -50,7 +50,7 @@ function AdminNotify() {
   const updateNotification = async (id) => {
     try {
       await axios.put(
-        `http://localhost:3000/notifications/${currentNotification._id}`,
+        `https://vouxosports-backend.onrender.com/notifications/${currentNotification._id}`,
         {
           title: currentNotification.title,
           message: currentNotification.message,
@@ -64,7 +64,7 @@ function AdminNotify() {
 
   const deleteNotification = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/notifications/${id}`);
+      await axios.delete(`https://vouxosports-backend.onrender.com/notifications/${id}`);
       fetchNotifications();
     } catch (err) {
       console.error("Error deleting notification:", err);
