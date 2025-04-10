@@ -13,7 +13,7 @@ export const loginAPI = async(reqBody)=>{
 
 
 
-const API_URL = "https://vouxosports-backend.onrender.com/matches";
+const API_URL = "https://vouxosports-server-production.up.railway.app/matches";
 
 export const fetchMatches = () => axios.get(API_URL);
 export const addMatch = (matchData) => axios.post(API_URL, matchData);
@@ -23,7 +23,7 @@ export const updateMatch = (id, matchData) => axios.put(`${API_URL}/${id}`, matc
 //upcoming 
 
 
-const app_url = "https://vouxosports-backend.onrender.com/upcomingmatches";
+const app_url = "https://vouxosports-server-production.up.railway.app/upcomingmatches";
 
 export const fetchUpcomingMatches = () => axios.get(app_url);
 export const addUpcomingMatch = (matchData) => axios.post(app_url, matchData);
@@ -31,7 +31,7 @@ export const deleteUpcomingMatch = (id) => axios.delete(`${app_url}/${id}`);
 export const updateUpcomingMatch = (id, matchData) => axios.put(`${app_url}/${id}`, matchData);
 
 
-const BASE_URL = "https://vouxosports-backend.onrender.com/notifications";
+const BASE_URL = "https://vouxosports-server-production.up.railway.app/notifications";
 
 export const getNotifications = async () => {
   const response = await axios.get(BASE_URL);
